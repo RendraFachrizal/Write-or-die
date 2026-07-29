@@ -8,7 +8,6 @@
 - **Storage:** localStorage (no backend)
 - **Routing:** React Router v6
 - **State Management:** React Context + useReducer (one context for documents)
-- **Testing:** Vitest + React Testing Library (not yet wired up)
 
 ## Folder Structure
 

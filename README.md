@@ -40,30 +40,50 @@ The app will be available at `http://localhost:5173`.
 ## Project Structure
 
 ```
-src/
-├── main.tsx                    # Entry point
-├── App.tsx                     # Router setup
-├── index.css                   # Global styles (dark theme)
-├── types/
-│   └── document.ts             # WritingDocument interface
-├── context/
-│   └── DocumentContext.tsx      # Document state + localStorage sync
-├── hooks/
-│   ├── useTimer.ts             # Countdown timer
-│   ├── useWordCount.ts         # Word counting + progress
-│   └── useFullscreen.ts        # Fullscreen API wrapper
-├── lib/
-│   ├── storage.ts              # localStorage helpers
-│   └── format.ts               # Shared formatting utilities
-├── pages/
-│   ├── DocumentList.tsx        # Home — list all documents
-│   ├── SessionSetup.tsx        # New session form
-│   ├── Editor.tsx              # Locked writing editor
-│   └── DocumentView.tsx        # Read-only document view
-└── components/
-    ├── TimerDisplay.tsx        # Timer with pulse warning
-    ├── WordCountDisplay.tsx     # Word count + progress bar
-    └── CompletionSummary.tsx    # Post-session stats overlay
+writeordie/
+├── index.html
+├── package.json
+├── tsconfig.json
+├── tsconfig.node.json
+├── vite.config.ts
+├── README.md
+├── docs/
+│   ├── PRD.md
+│   ├── ARCHITECTURE.md
+│   ├── TASKS.md
+│   └── CONVENTIONS.md
+└── src/
+    ├── main.tsx                     # Entry point
+    ├── App.tsx                      # Router + catch-all redirect
+    ├── vite-env.d.ts                # Vite client types
+    ├── index.css                    # Global styles (dark theme, resets)
+    ├── types/
+    │   └── document.ts              # WritingDocument interface
+    ├── context/
+    │   └── DocumentContext.tsx       # Document state + localStorage sync
+    ├── hooks/
+    │   ├── useTimer.ts              # Countdown timer (supports resume)
+    │   ├── useWordCount.ts          # Word counting + progress
+    │   └── useFullscreen.ts         # Fullscreen API (standard + webkit)
+    ├── lib/
+    │   ├── storage.ts               # localStorage helpers + STORAGE_KEY
+    │   └── format.ts                # Shared formatDuration helper
+    ├── pages/
+    │   ├── DocumentList.tsx
+    │   ├── DocumentList.module.css
+    │   ├── SessionSetup.tsx
+    │   ├── SessionSetup.module.css
+    │   ├── Editor.tsx
+    │   ├── Editor.module.css
+    │   ├── DocumentView.tsx
+    │   └── DocumentView.module.css
+    └── components/
+        ├── TimerDisplay.tsx
+        ├── TimerDisplay.module.css
+        ├── WordCountDisplay.tsx
+        ├── WordCountDisplay.module.css
+        ├── CompletionSummary.tsx
+        └── CompletionSummary.module.css
 ```
 
 ## Documentation
@@ -72,4 +92,3 @@ src/
 - [Architecture](./docs/ARCHITECTURE.md)
 - [Task List](./docs/TASKS.md)
 - [Conventions](./docs/CONVENTIONS.md)
-# Write-or-die
