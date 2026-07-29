@@ -26,15 +26,18 @@ The app will be available at `http://localhost:5173`.
 
 1. **Create a session** — set a title, timer, and/or word count goal
 2. **Start writing** — the app enters fullscreen and locks you in
-3. **Hit your target** — the session ends when the timer expires or you reach your word count
-4. **Review** — browse completed documents in the list
+3. **Hit your target** — when the timer expires or you reach your word count, a banner appears (green for success, red if you set both targets and the timer ran out before reaching the word count). Fullscreen stays active. You can keep writing or click "Finish Session" when ready.
+4. **Finish** — click "Finish Session" to exit fullscreen, save the document, and see your stats
+5. **Review** — browse completed documents in the list
 
 ### Lock Mechanism
 
-- Enters browser Fullscreen API — exiting fullscreen re-enters it
+- Enters browser Fullscreen API on session start — fullscreen stays active until you click "Finish Session"
 - Blocks tab close via `beforeunload` handler
 - Intercepts Escape, Ctrl+W, and Ctrl+F4
-- No visible navigation until the session completes
+- No visible navigation until the goal is reached
+- When a target is hit: lock handlers are removed, fullscreen remains active, and a non-intrusive banner appears with a "Finish Session" button
+- Clicking "Finish Session" exits fullscreen, saves the document, and shows the completion summary
 - Auto-saves content every 10 seconds (crash recovery)
 
 ## Project Structure

@@ -18,8 +18,8 @@ Solo writer (yourself) who wants to build a consistent writing habit through for
 2. **As a writer**, I want to create a new document and set a timer (minutes) and/or a word count goal before I start writing.
 3. **As a writer**, I want to be locked into a fullscreen, distraction-free editor once I start a session so I cannot quit early.
 4. **As a writer**, I want to see a live countdown timer and live word count while I write so I know my progress.
-5. **As a writer**, I want the session to end automatically when I reach my word count goal OR the timer runs out (whichever comes first).
-6. **As a writer**, I want my document to auto-save when the session ends so I never lose work.
+5. **As a writer**, I want the session to notify me when I reach my word count goal OR the timer runs out, and let me keep writing until I'm ready to finish.
+6. **As a writer**, I want my document to auto-save while I write so I never lose work in case of a crash.
 7. **As a writer**, I want to be able to open and read (but not session-lock) a completed document from the document list.
 
 ## Functional Requirements
@@ -39,6 +39,7 @@ Solo writer (yourself) who wants to build a consistent writing habit through for
 
 ### Locked Editor
 - Enters browser Fullscreen API on start
+- Fullscreen stays active until the user clicks "Finish Session"
 - Plain text editor (textarea), no formatting
 - Live word count display
 - Live countdown timer display (if timer was set)
@@ -48,12 +49,16 @@ Solo writer (yourself) who wants to build a consistent writing habit through for
   - Escape key is intercepted (re-enters fullscreen instead of exiting)
   - No navigation elements visible
   - No close/back/home buttons until goal is met
-- Session ends when:
-  - Word count goal is reached, OR
-  - Timer expires
-  - (Whichever comes first; if only one is set, that one governs)
-- On session end:
-  - Document saves to localStorage
+- When a target is reached:
+  - Lock handlers (beforeunload, key intercepts) are removed
+  - Fullscreen remains active
+  - A banner appears at the top of the editor:
+    - Green: "Goal reached! You can keep writing or finish." (word count met)
+    - Red: "Time's up! You didn't reach the target. Keep writing or finish." (both targets set, timer expired before word count met)
+  - The user can keep typing freely
+  - A "Finish Session" button is available
+- On "Finish Session":
+  - Document saves to localStorage with final word count and duration
   - Fullscreen exits
   - User is shown a completion summary (words written, time elapsed)
   - "Back to Documents" button appears

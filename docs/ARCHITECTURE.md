@@ -99,14 +99,27 @@ interface WritingDocument {
 
 ## Lock Mechanism Details
 
-The editor implements these layers:
+The editor implements these layers for the active session:
 
 1. `enterFullscreen()` on session start (via `useFullscreen` hook)
-2. `fullscreenchange` listener — if user exits fullscreen during session, re-request after 500ms debounce to prevent rate-limit loops
+2. `fullscreenchange` listener — if user exits fullscreen during active session, re-request after 500ms debounce to prevent rate-limit loops
 3. `beforeunload` handler — shows browser-native close confirmation
 4. `keydown` handler — intercepts Escape (re-enter fullscreen), Ctrl+W, Ctrl+F4, Alt+F4
 5. No visible navigation UI — status bar only, no back button or links
 6. Auto-save via context dispatch every 10 seconds (crash recovery)
+
+### Goal Reached Flow
+
+When a target is hit (timer expires or word count goal met):
+
+1. All lock handlers (beforeunload, keydown, fullscreen re-entry) are removed
+2. Fullscreen **remains active** — the user stays in the editor
+3. A banner appears at the top:
+   - **Green** (success): "Goal reached! You can keep writing or finish." — word count was met
+   - **Red** (failed): "Time's up! You didn't reach the target. Keep writing or finish." — both targets were set, timer expired before word count was met
+4. The textarea stays editable — the user can keep writing
+5. Clicking "Finish Session": exits fullscreen, saves the document (with all words including post-goal), and shows the CompletionSummary overlay
+6. Fullscreen does not re-enter after this point
 
 ## State Management
 

@@ -32,3 +32,59 @@
   border-top: 1px solid #1f1f1f;
   font-size: 0.85rem;
 }
+
+.goalBanner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: 0.75rem 1.5rem;
+  background: #1a2e1a;
+  border-bottom: 1px solid #2a4a2a;
+  color: #a0d8a0;
+  font-size: 0.95rem;
+}
+
+.goalBannerFailed {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: 0.75rem 1.5rem;
+  background: #2e1a1a;
+  border-bottom: 1px solid #4a2a2a;
+  color: #e8a0a0;
+  font-size: 0.95rem;
+}
+
+.finishButton {
+  padding: 0.4rem 1rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+  background: #2a4a2a;
+  border: 1px solid #3a5a3a;
+  border-radius: 6px;
+  color: #c0e8c0;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.finishButton:hover {
+  background: #3a5a3a;
+}
+
+.finishButtonFailed {
+  padding: 0.4rem 1rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+  background: #4a2a2a;
+  border: 1px solid #5a3a3a;
+  border-radius: 6px;
+  color: #e8c0c0;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.finishButtonFailed:hover {
+  background: #5a3a3a;
+}

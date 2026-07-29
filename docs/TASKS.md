@@ -119,6 +119,17 @@ All 15 tasks are done. Post-MVP bug fixes and hardening items are listed below.
 
 ---
 
+## Feedback Fixes
+
+| # | Issue | Fix |
+|---|---|---|
+| 1 | Escape exits fullscreen before typing | Lock handlers now depend only on `doc` and `goalReached` — not on `content` or other changing state. Keydown listener attached on mount immediately. |
+| 2 | Fullscreen persists after session ends | Separated `goalReached` and `sessionEnded` states. Fullscreen re-entry effect checks both flags. Fullscreen only exits on explicit "Finish Session" click. |
+| 3 | Session ends abruptly | Goal reached now shows a non-intrusive banner (green/red based on context) with keep-writing and "Finish Session" options. Lock handlers removed. Fullscreen stays active until user finishes. |
+| 4 | Resume not working | Discard button now has `window.confirm()`. Remaining resume pipeline was already correctly wired (context sync, auto-save, timer resume). |
+
+---
+
 ## Phase 2 (Future)
 
 - Dashboard page with writing streaks, total words, session history graph

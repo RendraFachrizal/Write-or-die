@@ -17,6 +17,8 @@ export default function Editor() {
   const doc = state.documents.find((d) => d.id === id);
 
   const [content, setContent] = useState(doc?.content ?? "");
+  const [goalReached, setGoalReached] = useState(false);
+  const [sessionEnded, setSessionEnded] = useState(false);
 
   const { isExpired, secondsRemaining, formattedTime } = useTimer(
     doc?.timerMinutes,
@@ -28,38 +30,54 @@ export default function Editor() {
   );
   const { enterFullscreen, exitFullscreen, isFullscreen } = useFullscreen();
 
-  const sessionComplete = isExpired || isGoalMet;
   const contentRef = useRef(content);
   contentRef.current = content;
 
   const sessionStartRef = useRef(Date.now());
+
+  // Use a ref to track sessionEnded so the fullscreen re-entry effect
+  // always sees the latest value without needing it in its dependency array.
+  const sessionEndedRef = useRef(false);
+  sessionEndedRef.current = sessionEnded;
+
+  const bothTargetsSet = doc?.timerMinutes !== null && doc?.wordCountGoal !== null;
+  const failed = bothTargetsSet && isExpired && !isGoalMet;
 
   const [completionData, setCompletionData] = useState<{
     wordCount: number;
     durationSeconds: number;
   } | null>(null);
 
+  // Redirect if doc doesn't exist
   useEffect(() => {
     if (!doc) {
       navigate("/", { replace: true });
     }
   }, [doc, navigate]);
 
+  // Fix 1: Enter fullscreen on mount — only depends on doc existing, not on content
   useEffect(() => {
-    if (!doc || sessionComplete) return;
+    if (!doc || goalReached) return;
     enterFullscreen();
-  }, [enterFullscreen, doc, sessionComplete]);
+  }, [enterFullscreen, doc, goalReached]);
 
+  // Fix 2: Re-enter fullscreen when exited, but NOT after goal reached or session ended
   useEffect(() => {
-    if (!doc || sessionComplete) return;
+    if (!doc || goalReached) return;
+    if (sessionEndedRef.current) return;
     if (!isFullscreen) {
-      const id = setTimeout(() => enterFullscreen(), 500);
-      return () => clearTimeout(id);
+      const timerId = setTimeout(() => {
+        if (!sessionEndedRef.current) {
+          enterFullscreen();
+        }
+      }, 500);
+      return () => clearTimeout(timerId);
     }
-  }, [isFullscreen, enterFullscreen, doc, sessionComplete]);
+  }, [isFullscreen, enterFullscreen, doc, goalReached]);
 
+  // Fix 1: Lock handlers — attached on mount, only gated on doc + goalReached
   useEffect(() => {
-    if (!doc || sessionComplete) return;
+    if (!doc || goalReached) return;
 
     function handleBeforeUnload(e: BeforeUnloadEvent) {
       e.preventDefault();
@@ -89,10 +107,11 @@ export default function Editor() {
       window.removeEventListener("beforeunload", handleBeforeUnload);
       document.removeEventListener("keydown", handleKeyDown);
     };
-  }, [doc, sessionComplete, enterFullscreen]);
+  }, [doc, goalReached, enterFullscreen]);
 
+  // Auto-save every 10 seconds while session is active
   useEffect(() => {
-    if (!doc || sessionComplete) return;
+    if (!doc || sessionEnded) return;
 
     const intervalId = setInterval(() => {
       if (!doc) return;
@@ -103,14 +122,26 @@ export default function Editor() {
     }, 10_000);
 
     return () => clearInterval(intervalId);
-  }, [doc, sessionComplete, dispatch]);
+  }, [doc, sessionEnded, dispatch]);
 
+  // Fix 3: When goal is reached, unlock the user but don't end the session
   useEffect(() => {
-    if (!doc || !sessionComplete || completionData) return;
+    if (!doc || goalReached || sessionEnded) return;
+    if (isExpired || isGoalMet) {
+      setGoalReached(true);
+    }
+  }, [doc, goalReached, sessionEnded, isExpired, isGoalMet]);
+
+  // Fix 3: Handle the user clicking "Finish Session"
+  const handleFinishSession = useCallback(() => {
+    if (!doc || sessionEnded) return;
 
     const elapsed = Math.floor(
       (Date.now() - sessionStartRef.current) / 1000,
     );
+
+    setSessionEnded(true);
+    exitFullscreen();
 
     dispatch({
       type: "UPDATE_DOCUMENT",
@@ -124,9 +155,8 @@ export default function Editor() {
       },
     });
 
-    exitFullscreen();
     setCompletionData({ wordCount, durationSeconds: elapsed });
-  }, [doc, sessionComplete, completionData, wordCount, dispatch, exitFullscreen]);
+  }, [doc, sessionEnded, wordCount, dispatch, exitFullscreen]);
 
   const handleChange = useCallback(
     (text: string) => {
@@ -145,13 +175,25 @@ export default function Editor() {
 
   return (
     <div className={styles.page}>
+      {goalReached && !sessionEnded && (
+        <div className={failed ? styles.goalBannerFailed : styles.goalBanner}>
+          <span>{failed ? "Time's up! You didn't reach the target. Keep writing or finish." : "Goal reached! You can keep writing or finish."}</span>
+          <button
+            className={failed ? styles.finishButtonFailed : styles.finishButton}
+            onClick={handleFinishSession}
+          >
+            Finish Session
+          </button>
+        </div>
+      )}
+
       <textarea
         className={styles.editor}
         value={content}
         onChange={(e) => handleChange(e.target.value)}
         placeholder="Start writing..."
         autoFocus
-        readOnly={sessionComplete}
+        readOnly={sessionEnded}
       />
 
       <div className={styles.bar}>

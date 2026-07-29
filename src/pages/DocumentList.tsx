@@ -18,7 +18,9 @@ export default function DocumentList() {
   }
 
   function handleDiscard(id: string) {
-    dispatch({ type: "DELETE_DOCUMENT", payload: id });
+    if (window.confirm("Discard this session? This cannot be undone.")) {
+      dispatch({ type: "DELETE_DOCUMENT", payload: id });
+    }
   }
 
   function handleDelete(id: string, e: React.MouseEvent) {
