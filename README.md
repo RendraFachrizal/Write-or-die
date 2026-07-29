@@ -72,3 +72,4 @@ src/
 - [Architecture](./docs/ARCHITECTURE.md)
 - [Task List](./docs/TASKS.md)
 - [Conventions](./docs/CONVENTIONS.md)
+# Write-or-die
