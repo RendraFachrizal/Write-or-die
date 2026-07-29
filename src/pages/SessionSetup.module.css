@@ -1,0 +1,88 @@
+.page {
+  max-width: 460px;
+  margin: 5rem auto 0;
+  padding: 2rem;
+}
+
+.page h1 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 2rem;
+  letter-spacing: -0.02em;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  font-size: 0.85rem;
+  color: #888;
+}
+
+.field input {
+  padding: 0.6rem 0.75rem;
+  font-size: 1rem;
+  border-radius: 6px;
+}
+
+.error {
+  color: #e44;
+  font-size: 0.85rem;
+  margin: 0;
+}
+
+.submitButton {
+  padding: 0.65rem 1.5rem;
+  font-size: 0.95rem;
+  font-weight: 500;
+  background: #2a2a2a;
+  border: 1px solid #3a3a3a;
+  border-radius: 6px;
+  align-self: flex-start;
+  transition: background 0.15s, border-color 0.15s;
+  margin-top: 0.25rem;
+}
+
+.submitButton:hover {
+  background: #353535;
+  border-color: #555;
+}
+
+.progressWarning {
+  background: #1a1a2e;
+  border: 1px solid #2a2a4e;
+  border-radius: 8px;
+  padding: 1.25rem 1.5rem;
+}
+
+.progressWarning p {
+  color: #b8b8e0;
+  font-size: 0.95rem;
+  margin-bottom: 0.35rem;
+}
+
+.warningActions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1.25rem;
+  align-items: center;
+}
+
+.discardLink {
+  background: none;
+  border: none;
+  color: #cf8f8f;
+  font-size: 0.85rem;
+  cursor: pointer;
+  padding: 0;
+}
+
+.discardLink:hover {
+  text-decoration: underline;
+}

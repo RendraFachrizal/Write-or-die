@@ -1,0 +1,1 @@
+Stack: React + Vite + TypeScript. Styling: CSS Modules. Storage: localStorage. Routing: React Router v6. State: React Context + useReducer. No backend. See docs/ARCHITECTURE.md for full details. Current status: Phase 1 MVP complete.

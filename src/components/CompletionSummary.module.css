@@ -1,0 +1,63 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.8);
+  z-index: 100;
+  backdrop-filter: blur(4px);
+}
+
+.card {
+  background: #1a1a1a;
+  border: 1px solid #2a2a2a;
+  border-radius: 10px;
+  padding: 2.5rem 3rem;
+  text-align: center;
+  min-width: 320px;
+}
+
+.card h2 {
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+
+.stats {
+  display: flex;
+  gap: 2.5rem;
+  justify-content: center;
+  margin: 2rem 0;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+}
+
+.value {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+.label {
+  font-size: 0.8rem;
+  color: #777;
+  margin-top: 0.2rem;
+}
+
+.backButton {
+  padding: 0.6rem 1.5rem;
+  font-size: 0.95rem;
+  font-weight: 500;
+  background: #2a2a2a;
+  border: 1px solid #3a3f3a;
+  border-radius: 6px;
+  transition: background 0.15s;
+}
+
+.backButton:hover {
+  background: #353535;
+}
